@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">AEPatcher</string>
+	<string name="patch_error_no_entry" formatted="false">Cannot find \'%s\' inside the patch.</string>
+	<string name="patch_error_cannot_parse" formatted="false">Cannot parse line %d: %s</string>
+	<string name="patch_error_unknown_rule" formatted="false">Unsupported rule at line %d: %s</string>
+	<string name="patch_error_read_from" formatted="false">Cannot read from %s.</string>
+	<string name="patch_error_write_to" formatted="false">Cannot write to %s.</string>
+	<string name="patch_error_no_source_file">Source file is not specified.</string>
+	<string name="patch_error_no_target_file">Target file is not specified.</string>
+	<string name="patch_error_no_match_content">Match content is not specified.</string>
+	<string name="patch_error_no_match" formatted="false">No match found in %s.</string>
+	<string name="patch_error_publicxml_notfound">Cannot find res/values/public.xml</string>
+	<string name="patch_error_invalid_target" formatted="false">Invalid or unsupported target at line %d: %s</string>
+	<string name="patch_info_num_replaced">%d match(es) replaced.</string>
+	<string name="general_error">Error: %s</string>
+	<string name="failed_create_dir">Failed to create directory: %s</string>
+	<string name="patch_error_no_goto_target">GOTO is not specified for [MATCH_GOTO]/[GOTO] rule.</string>
+	<string name="patch_error_goto_target_notfound">Cannot find the GOTO target \'%s\'</string>
+	<string name="patch_error_regex_not_true">REGEX must be true in MATCH_ASSIGN rule.</string>
+	<string name="patch_error_regex_syntax">Regular Expression Syntax error: %s</string>
+	<string name="patch_error_no_script_name">Script name is not specified.</string>
+	<string name="patch_error_no_main_class">Main class is not specified.</string>
+	<string name="patch_error_no_entrance_func">Entrance function is not specified.</string>
+	<string name="patch_applied">Patch Applied</string>
+	<string name="no_patch_selected">No patch selected</string>
+	<string name="patch_start_parse">Parse rules inside patch.txt …</string>
+	<string name="patch_start_apply" formatted="false">Apply patch rule at line %d …</string>
+	<string name="all_rules_applied">All rules applied.</string>
+	<string name="decode_dex_file">Decode DEX File …</string>
+	<string name="need_permissions">Permission to access the storage must be granted!</string>
+	<string name="intent_error">No input received!</string>
+	<string name="github">GitHub</string>
+	<string name="cancel">Cancel</string>
+	<string name="close">Close</string>
+	<string name="copy">Copy</string>
+	<string name="ok">Ok</string>
+	<string name="cancel_msg">Are you sure you want to cancel the process and exit?</string>
+	<string name="need_decode">It is necessary to decompile dex files!</string>
+	<string name="patch_fmt">Patch: %s</string>
+	<string name="project_fmt">Project: %s</string>
+	<string name="apk_fmt">APK: %s</string>
+	<string name="tspent">Time spent: %s</string>
+</resources>

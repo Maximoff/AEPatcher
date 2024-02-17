@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="patch_error_no_entry" formatted="false">Не удаётся найти \'%s\' внутри патча.</string>
+	<string name="patch_error_cannot_parse" formatted="false">Не удаётся выполнить анализ строки %d: %s</string>
+	<string name="patch_error_unknown_rule" formatted="false">Неподдерживаемое правило в строке %d: %s</string>
+	<string name="patch_error_read_from" formatted="false">Не удаётся прочитать из %s.</string>
+	<string name="patch_error_write_to" formatted="false">Не удаётся записать в %s.</string>
+	<string name="patch_error_no_source_file">Не указан исходный файл.</string>
+	<string name="patch_error_no_target_file">Не указан конечный файл.</string>
+	<string name="patch_error_no_match_content">Не определено сравниваемое содержимое.</string>
+	<string name="patch_error_no_match" formatted="false">В %s совпадений не найдено.</string>
+	<string name="patch_error_publicxml_notfound">Не удаётся найти res/values/public.xml</string>
+	<string name="patch_error_invalid_target" formatted="false">Недействительная или неподдерживаемая цель в строке %d: %s</string>
+	<string name="patch_info_num_replaced">%d совпадений заменено.</string>
+	<string name="general_error">Ошибка: %s</string>
+	<string name="failed_create_dir">Не удалось создать папку: %s</string>
+	<string name="patch_error_no_goto_target">GOTO не определён в правиле [MATCH_GOTO]/[GOTO].</string>
+	<string name="patch_error_goto_target_notfound">Не найдена точка перехода для GOTO \'%s\'</string>
+	<string name="patch_error_regex_not_true">REGEX должны быть включены (true) в правиле MATCH_ASSIGN.</string>
+	<string name="patch_error_regex_syntax">Синтаксическая ошибка в регулярном выражении: %s</string>
+	<string name="patch_error_no_script_name">Не указано имя скрипта.</string>
+	<string name="patch_error_no_main_class">Не задан основной класс.</string>
+	<string name="patch_error_no_entrance_func">Не задана входная функция.</string>
+	<string name="patch_applied">Патч применён</string>
+	<string name="no_patch_selected">Патч не выбран</string>
+	<string name="patch_start_parse">Анализ правил внутри patch.txt…</string>
+	<string name="patch_start_apply" formatted="false">Применение правила патча в строке %d…</string>
+	<string name="all_rules_applied">Все правила применены.</string>
+	<string name="decode_dex_file">Декодирование DEX-файла</string>
+	<string name="need_permissions">Необходимо выдать разрешение на доступ к хранилищу!</string>
+	<string name="intent_error">Не были получены входные данные!</string>
+	<string name="cancel">Отмена</string>
+	<string name="close">Закрыть</string>
+	<string name="copy">Копировать</string>
+	<string name="ok">Ок</string>
+	<string name="cancel_msg">Вы уверены, что хотите отменить процесс и выйти?</string>
+	<string name="need_decode">Необходимо декомпилировать dex файлы!</string>
+	<string name="patch_fmt">Патч: %s</string>
+	<string name="project_fmt">Проект: %s</string>
+	<string name="apk_fmt">APK: %s</string>
+	<string name="tspent">Времени затрачено: %s</string>
+</resources>

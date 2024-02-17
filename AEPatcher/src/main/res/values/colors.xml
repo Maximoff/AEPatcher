@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="accent">#FF33CCFF</color>
+	<color name="red_text">#ffcc0000</color>
+	<color name="green_text">#ff009900</color>
+    <color name="dialog_stroke">#ff212121</color>
+    <color name="navbar">#ff212121</color>
+	<color name="navbar_light">#ff757575</color>
+</resources>
