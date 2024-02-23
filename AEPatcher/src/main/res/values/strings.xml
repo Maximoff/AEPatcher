@@ -42,4 +42,5 @@
 	<string name="apk_fmt">APK: %s</string>
 	<string name="tspent">Time spent: %s</string>
 	<string name="patch_error_apkisnull">The path to the apk is not specified!</string>
+	<string name="patch_help">Help</string>
 </resources>

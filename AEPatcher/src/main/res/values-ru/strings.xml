@@ -40,4 +40,5 @@
 	<string name="apk_fmt">APK: %s</string>
 	<string name="tspent">Времени затрачено: %s</string>
 	<string name="patch_error_apkisnull">Путь к apk не указан!</string>
+	<string name="patch_help">Справка</string>
 </resources>

@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -18,13 +19,16 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +38,7 @@ import com.gmail.heagoo.apkeditor.patch.PatchExecutor;
 import com.gmail.heagoo.common.SDCard;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,27 +83,34 @@ public class MainActivity extends Activity implements IPatchContext {
 		if (intent.getType().equals("application/ru.maximoff.aepatcher-patch")) {
 			int appTheme = intent.getIntExtra("appTheme", 0);
 			int themeId, iconId;
+			final int gitIconId;
 			switch (appTheme) {
 				case 0: // light
 				default:
 					themeId = R.style.AppTheme;
 					iconId = R.drawable.ic_settings;
+					gitIconId = R.drawable.ic_git;
 					break;
 
 				case 1: // dark
 					themeId = R.style.AppThemeDark;
 					iconId = R.drawable.ic_settings_white;
+					gitIconId = R.drawable.ic_git_white;
 					break;
 
 				case 2: // black
 					themeId = R.style.AppThemeBlack;
 					iconId = R.drawable.ic_settings_white;
+					gitIconId = R.drawable.ic_git_white;
 					break;
 			}
 			setTheme(themeId);
+			final String language;
 			if (intent.hasExtra("appLanguage")) {
-				String language = intent.getStringExtra("appLanguage");
+				language = intent.getStringExtra("appLanguage");
 				Utils.loadLanguage(this, language);
+			} else {
+				language = "en";
 			}
 			if (intent.hasExtra("keepScreenOn")) {
 				boolean screenOn = intent.getBooleanExtra("keepScreenOn", true);
@@ -125,7 +137,7 @@ public class MainActivity extends Activity implements IPatchContext {
 				.setView(rootView)
 				.setPositiveButton(R.string.cancel, null)
 				.setNegativeButton(R.string.copy, null)
-				.setNeutralButton(R.string.github, null)
+				.setNeutralButton(R.string.patch_help, null)
 				.setCancelable(false)
 				.create();
 			dialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -148,6 +160,32 @@ public class MainActivity extends Activity implements IPatchContext {
 							rotation.setDuration(2500);
 							dialogIcon.setAnimation(rotation);
 							dialogIcon.startAnimation(rotation);
+
+							LinearLayout parent = (LinearLayout) dialogIcon.getParent();
+							TextView title = (TextView) parent.getChildAt(1);
+							LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+							title.setLayoutParams(params);
+							title.requestLayout();
+							ImageView gitIcon = new ImageView(MainActivity.this);
+							gitIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+							gitIcon.setImageResource(gitIconId);
+							gitIcon.setClickable(true);
+							gitIcon.setFocusable(true);
+							gitIcon.setContentDescription(getText(R.string.github));
+							gitIcon.setOnClickListener(new OnClickListener() {
+									@Override
+									public void onClick(View p1) {
+										Intent i = new Intent(Intent.ACTION_VIEW);
+										i.setData(Uri.parse("https://github.com/Maximoff/AEPatcher"));
+										startActivity(i);
+									}
+								});
+							MarginLayoutParams mp2 = new MarginLayoutParams(MarginLayoutParams.WRAP_CONTENT, MarginLayoutParams.WRAP_CONTENT);
+							mp2.width = icSize;
+							mp2.height = icSize;
+							mp2.setMargins(margin, 0, 0, 0);
+							parent.addView(gitIcon, mp2);
+							gitIcon.requestLayout();
 						}
 						positiveBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
 						positiveBtn.setOnClickListener(new View.OnClickListener() {
@@ -187,9 +225,7 @@ public class MainActivity extends Activity implements IPatchContext {
 						git.setOnClickListener(new View.OnClickListener() {
 								@Override
 								public void onClick(View p1) {
-									Intent i = new Intent(Intent.ACTION_VIEW);
-									i.setData(Uri.parse("https://github.com/Maximoff/AEPatcher"));
-									startActivity(i);
+									helpDialog(language);
 								}
 							});
 					}
@@ -232,6 +268,35 @@ public class MainActivity extends Activity implements IPatchContext {
 		timeSpent = System.currentTimeMillis();
 		patchExecutor = new PatchExecutor(this, patchPath);
 		patchExecutor.applyPatch();
+	}
+
+	public void helpDialog(String lang) {
+		String htmLang;
+		AssetManager mg = getResources().getAssets();
+		InputStream is = null;
+		try {
+			is = mg.open("about_patch_" + lang + ".htm");
+			htmLang = "_" + lang;
+		} catch (Exception ex) {
+			htmLang = "_en";
+		}
+		finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (Exception e) {}
+			}
+		}
+		WebView web = new WebView(this);
+		web.getSettings().setJavaScriptEnabled(true);
+		web.getSettings().setAllowFileAccess(true);
+		web.loadUrl("file:///android_asset/about_patch" + htmLang + ".htm");
+		new AlertDialog.Builder(this)
+			.setTitle(R.string.patch_help)
+			.setView(web)
+			.setPositiveButton(R.string.ok, null)
+			.create()
+			.show();
 	}
 
 	@Override
