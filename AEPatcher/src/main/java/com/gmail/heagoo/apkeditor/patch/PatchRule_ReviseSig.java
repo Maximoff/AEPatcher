@@ -48,6 +48,10 @@ class PatchRule_ReviseSig extends PatchRule {
     @Override
     public String executeRule(MainActivity activity, ZipFile patchZip, IPatchContext logger) {
         String apkPath = activity.getApkPath();
+		if (apkPath == null) {
+			logger.error(R.string.patch_error_apkisnull);
+			return null;
+		}
         String hexRSA = getHexRSA(apkPath);
         String packageName = activity.getApkInfo().packageName;
         String rootPath = logger.getDecodeRootPath();
