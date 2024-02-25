@@ -40,9 +40,23 @@ class PatchRule_AddFiles extends PatchRule {
                 continue;
             } else if (SOURCE.equals(line)) {
                 String next = br.readLine();
+				
+				// проверка переменных в пути
+				String assign = assignValues(logger, next);
+				if (assign != null) {
+					next = assign;
+				}
+				
                 this.sourceFile = next.trim();
             } else if (TARGET.equals(line)) {
                 String next = br.readLine();
+				
+				// проверка переменных в пути
+				String assign = assignValues(logger, next);
+				if (assign != null) {
+					next = assign;
+				}
+				
                 this.targetFile = next.trim();
             } else if (EXTRACT.equals(line)) {
                 String next = br.readLine();

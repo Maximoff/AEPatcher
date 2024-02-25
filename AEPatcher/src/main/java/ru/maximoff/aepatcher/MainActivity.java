@@ -116,6 +116,10 @@ public class MainActivity extends Activity implements IPatchContext {
 				boolean screenOn = intent.getBooleanExtra("keepScreenOn", true);
 				Utils.toggleScreenOn(this, screenOn);
 			}
+			if (intent.hasExtra("showHelp")) {
+				helpDialog(language);
+				return;
+			}
 			if (intent.hasExtra("projectPath")) {
 				projectPath = intent.getStringExtra("projectPath");
 			}
@@ -145,14 +149,14 @@ public class MainActivity extends Activity implements IPatchContext {
 					public void onShow(DialogInterface p1) {
 						ImageView dialogIcon = dialog.findViewById(android.R.id.icon);
 						if (dialogIcon != null) {
-							int icSize = Utils.dpAsPx(MainActivity.this, 24.0f);
+							int iconSize = Utils.dpAsPx(MainActivity.this, 24.0f);
 							int margin = Utils.dpAsPx(MainActivity.this, 5.0f);
 							dialogIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-							MarginLayoutParams mp = (ViewGroup.MarginLayoutParams) dialogIcon.getLayoutParams();
-							mp.width = icSize;
-							mp.height = icSize;
-							mp.setMargins(mp.leftMargin, mp.topMargin, margin, mp.bottomMargin);
-							dialogIcon.setLayoutParams(mp);
+							MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) dialogIcon.getLayoutParams();
+							marginParams.width = iconSize;
+							marginParams.height = iconSize;
+							marginParams.setMargins(0, 0, margin, 0);
+							dialogIcon.setLayoutParams(marginParams);
 							dialogIcon.requestLayout();
 							rotation = new RotateAnimation(0.0f, 360.0f , Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
 							rotation.setInterpolator(new LinearInterpolator());
@@ -180,11 +184,11 @@ public class MainActivity extends Activity implements IPatchContext {
 										startActivity(i);
 									}
 								});
-							MarginLayoutParams mp2 = new MarginLayoutParams(MarginLayoutParams.WRAP_CONTENT, MarginLayoutParams.WRAP_CONTENT);
-							mp2.width = icSize;
-							mp2.height = icSize;
-							mp2.setMargins(margin, 0, 0, 0);
-							parent.addView(gitIcon, mp2);
+							MarginLayoutParams marginParams2 = new MarginLayoutParams(MarginLayoutParams.WRAP_CONTENT, MarginLayoutParams.WRAP_CONTENT);
+							marginParams2.width = iconSize;
+							marginParams2.height = iconSize;
+							marginParams2.setMargins(margin, 0, 0, 0);
+							parent.addView(gitIcon, marginParams2);
 							gitIcon.requestLayout();
 						}
 						positiveBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE);

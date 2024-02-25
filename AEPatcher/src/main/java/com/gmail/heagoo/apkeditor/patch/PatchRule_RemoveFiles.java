@@ -58,6 +58,13 @@ class PatchRule_RemoveFiles extends PatchRule {
         ResListAdapter resAdapter = activity.getResListAdapter();
         for (int i = 0; i < targetList.size(); ++i) {
             String targetPath = targetList.get(i);
+			
+			// проверка переменных в пути
+			String assign = assignValues(logger, targetPath);
+			if (assign != null) {
+				targetPath = assign;
+			}
+			
             String filePath = rootPath + "/" + targetPath;
             int pos = filePath.lastIndexOf('/');
             String dirPath = filePath.substring(0, pos);
