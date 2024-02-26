@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 import java.util.List;
+import ru.maximoff.aepatcher.R;
 
 public class CreateHelpShortcut extends Activity {
 	private final int CREATE_SHORTCUT_CODE = 1117;
@@ -78,8 +80,8 @@ public class CreateHelpShortcut extends Activity {
 				Intent shortcutIntent = new Intent(Intent.ACTION_VIEW);
 				shortcutIntent.addCategory(Intent.CATEGORY_DEFAULT);
 				shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				shortcutIntent.setDataAndType(Uri.parse(""), MainActivity.INTENT_TYPE);
+				shortcutIntent.setData(Uri.EMPTY);
+				shortcutIntent.setType(MainActivity.INTENT_TYPE);
 				shortcutIntent.putExtra("showHelp", true);
 				shortcutIntent.setPackage(getPackageName());
 				ShortcutInfo shortcutInfo = new ShortcutInfo
@@ -99,14 +101,14 @@ public class CreateHelpShortcut extends Activity {
 			Intent shortcutIntent = new Intent(Intent.ACTION_VIEW);
 			shortcutIntent.addCategory(Intent.CATEGORY_DEFAULT);
 			shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			shortcutIntent.setDataAndType(Uri.parse(""), MainActivity.INTENT_TYPE);
+			shortcutIntent.setData(Uri.EMPTY);
+			shortcutIntent.setType(MainActivity.INTENT_TYPE);
 			shortcutIntent.putExtra("showHelp", true);
 			shortcutIntent.setPackage(getPackageName());
 			Intent addIntent = new Intent();
 			addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
 			addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.patch_help));
-			addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.mipmap.ic_launcher));
+			addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
 			addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
 			addIntent.putExtra("duplicate", false);
 			sendBroadcast(addIntent);

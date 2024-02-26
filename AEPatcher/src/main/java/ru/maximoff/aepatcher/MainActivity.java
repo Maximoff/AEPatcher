@@ -80,7 +80,7 @@ public class MainActivity extends Activity implements IPatchContext {
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		if (intent == null || intent.getData() == null || intent.getType() == null) {
+		if (intent == null || (!intent.hasExtra("showHelp") && intent.getData() == null) || intent.getType() == null) {
 			Toast.makeText(this, R.string.intent_error, Toast.LENGTH_SHORT).show();
 			finish();
 			return;
