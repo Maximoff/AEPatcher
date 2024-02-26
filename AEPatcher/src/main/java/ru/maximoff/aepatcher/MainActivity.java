@@ -20,6 +20,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class MainActivity extends Activity implements IPatchContext {
 	private String apkPath;
 	private RotateAnimation rotation;
 	private long timeSpent;
+	private long lastBackClick = 0L;
 
 	private String packageName = null;
 	private String applicationName = null;
@@ -203,7 +205,6 @@ public class MainActivity extends Activity implements IPatchContext {
 								public void onClick(View p1) {
 									if (patchApplied) {
 										dialog.cancel();
-										MainActivity.this.exit();
 									} else {
 										new AlertDialog.Builder(MainActivity.this)
 											.setMessage(R.string.cancel_msg)
@@ -212,7 +213,6 @@ public class MainActivity extends Activity implements IPatchContext {
 												public void onClick(DialogInterface p1, int p2) {
 													p1.cancel();
 													dialog.cancel();
-													MainActivity.this.exit();
 												}
 											})
 											.setNegativeButton(R.string.cancel, null)
@@ -235,9 +235,30 @@ public class MainActivity extends Activity implements IPatchContext {
 						git.setOnClickListener(new View.OnClickListener() {
 								@Override
 								public void onClick(View p1) {
+									lastBackClick = 0L;
 									helpDialog(language, false);
 								}
 							});
+					}
+				});
+			dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+					@Override
+					public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+						if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP && !event.isCanceled()) {
+							if (!patchApplied) {
+								positiveBtn.performClick();
+								return false;
+							}
+							long curClick = System.currentTimeMillis();
+							if (curClick - lastBackClick > 2000L) {
+								Toast.makeText(MainActivity.this, R.string.click_to_exit, Toast.LENGTH_SHORT).show();
+								lastBackClick = curClick;
+								return false;
+							}
+							dialog.cancel();
+							return true;
+						}
+						return false;
 					}
 				});
 			dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -246,6 +267,7 @@ public class MainActivity extends Activity implements IPatchContext {
 						if (rotation != null) {
 							rotation.cancel();
 						}
+						MainActivity.this.exit();
 					}
 				});
 			dialog.show();
@@ -321,11 +343,26 @@ public class MainActivity extends Activity implements IPatchContext {
 					}
 				}
 			});
+		dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+				@Override
+				public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+					if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP && !event.isCanceled()) {
+						long curClick = System.currentTimeMillis();
+						if (exitOnClose && curClick - lastBackClick > 2000L) {
+							Toast.makeText(MainActivity.this, R.string.click_to_exit, Toast.LENGTH_SHORT).show();
+							lastBackClick = curClick;
+							return false;
+						}
+						dialog.cancel();
+						return true;
+					}
+					return false;
+				}
+			});
 		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 				@Override
 				public void onShow(DialogInterface p1) {
 					Button shortcut = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-					shortcut.setVisibility(exitOnClose ? View.GONE : View.VISIBLE);
 					shortcut.setOnClickListener(new OnClickListener() {
 							@Override
 							public void onClick(View p1) {
@@ -337,7 +374,6 @@ public class MainActivity extends Activity implements IPatchContext {
 								}
 							}
 						});
-
 				}
 			});
 		dialog.show();

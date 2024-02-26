@@ -45,4 +45,5 @@
 	<string name="success">Успешно</string>
 	<string name="error">Ошибка</string>
 	<string name="shortcut_exists">Ярлык уже существует</string>
+	<string name="click_to_exit">Нажмите ещё раз, чтобы выйти</string>
 </resources>

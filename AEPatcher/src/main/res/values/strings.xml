@@ -47,4 +47,5 @@
 	<string name="error">Error</string>
 	<string name="success">Successfully</string>
 	<string name="shortcut_exists">Shortcut already exists</string>
+	<string name="click_to_exit">Click again to exit</string>
 </resources>
