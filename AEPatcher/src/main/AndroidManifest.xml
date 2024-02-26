@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,5 +29,12 @@
 				<data android:mimeType="application/ru.maximoff.aepatcher-patch"/>
 			</intent-filter>
         </activity>
+        <activity
+			android:name="${applicationId}.CreateHelpShortcut"
+			android:configChanges="locale|keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+			android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+			android:launchMode="singleTask"
+			android:theme="@style/AppTheme"
+			android:label="@string/shortcut"/>
     </application>
 </manifest>

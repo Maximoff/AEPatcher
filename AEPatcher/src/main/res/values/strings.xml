@@ -43,4 +43,8 @@
 	<string name="tspent">Time spent: %s</string>
 	<string name="patch_error_apkisnull">The path to the apk is not specified!</string>
 	<string name="patch_help">Help</string>
+	<string name="shortcut">Shortcut</string>
+	<string name="error">Error</string>
+	<string name="success">Successfully</string>
+	<string name="shortcut_exists">Shortcut already exists</string>
 </resources>

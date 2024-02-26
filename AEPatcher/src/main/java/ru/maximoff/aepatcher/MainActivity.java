@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -14,6 +15,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -48,6 +50,7 @@ import ru.maximoff.aepatcher.R;
 public class MainActivity extends Activity implements IPatchContext {
 	private final String ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION = "android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION";
 	private final String ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION = "android.settings.MANAGE_ALL_FILES_ACCESS_PERMISSION";
+	public static final String INTENT_TYPE = "application/ru.maximoff.aepatcher-patch";
 	private final int REQUEST_PERM = 1010;
 	private final int REQUEST_MANAGER = 1011;
 	private final String[] PERMISSIONS = new String[]{"READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"};
@@ -80,8 +83,9 @@ public class MainActivity extends Activity implements IPatchContext {
 			finish();
 			return;
 		}
-		if (intent.getType().equals("application/ru.maximoff.aepatcher-patch")) {
-			int appTheme = intent.getIntExtra("appTheme", 0);
+		if (intent.getType().equals(INTENT_TYPE)) {
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+			int appTheme = intent.getIntExtra("appTheme", pref.getInt("appTheme", 0));
 			int themeId, iconId;
 			final int gitIconId;
 			switch (appTheme) {
@@ -110,14 +114,16 @@ public class MainActivity extends Activity implements IPatchContext {
 				language = intent.getStringExtra("appLanguage");
 				Utils.loadLanguage(this, language);
 			} else {
-				language = "en";
+				language = pref.getString("appLanguage", "en");
 			}
+			boolean screenOn = pref.getBoolean("keepScreenOn", true);
 			if (intent.hasExtra("keepScreenOn")) {
-				boolean screenOn = intent.getBooleanExtra("keepScreenOn", true);
-				Utils.toggleScreenOn(this, screenOn);
+				screenOn = intent.getBooleanExtra("keepScreenOn", screenOn);
 			}
+			Utils.toggleScreenOn(this, screenOn);
+			pref.edit().putInt("appTheme", appTheme).putString("appLanguage", language).putBoolean("keepScreenOn", screenOn).commit();
 			if (intent.hasExtra("showHelp")) {
-				helpDialog(language);
+				helpDialog(language, true);
 				return;
 			}
 			if (intent.hasExtra("projectPath")) {
@@ -229,7 +235,7 @@ public class MainActivity extends Activity implements IPatchContext {
 						git.setOnClickListener(new View.OnClickListener() {
 								@Override
 								public void onClick(View p1) {
-									helpDialog(language);
+									helpDialog(language, false);
 								}
 							});
 					}
@@ -274,7 +280,7 @@ public class MainActivity extends Activity implements IPatchContext {
 		patchExecutor.applyPatch();
 	}
 
-	public void helpDialog(String lang) {
+	public void helpDialog(String lang, final boolean exitOnClose) {
 		String htmLang;
 		AssetManager mg = getResources().getAssets();
 		InputStream is = null;
@@ -295,12 +301,46 @@ public class MainActivity extends Activity implements IPatchContext {
 		web.getSettings().setJavaScriptEnabled(true);
 		web.getSettings().setAllowFileAccess(true);
 		web.loadUrl("file:///android_asset/about_patch" + htmLang + ".htm");
-		new AlertDialog.Builder(this)
+		final AlertDialog dialog = new AlertDialog.Builder(this)
 			.setTitle(R.string.patch_help)
 			.setView(web)
-			.setPositiveButton(R.string.ok, null)
-			.create()
-			.show();
+			.setCancelable(!exitOnClose)
+			.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface p1, int p2) {
+					p1.cancel();
+				}
+			})
+			.setNeutralButton(R.string.shortcut, null)
+			.create();
+		dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface p1) {
+					if (exitOnClose) {
+						MainActivity.this.exit();
+					}
+				}
+			});
+		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+				@Override
+				public void onShow(DialogInterface p1) {
+					Button shortcut = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+					shortcut.setVisibility(exitOnClose ? View.GONE : View.VISIBLE);
+					shortcut.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View p1) {
+								try {
+									Intent addShortcut = new Intent(MainActivity.this, CreateHelpShortcut.class);
+									startActivity(addShortcut);
+								} catch (Exception e) {
+									Toast.makeText(MainActivity.this, getString(R.string.general_error, e.getMessage()), Toast.LENGTH_SHORT).show();
+								}
+							}
+						});
+
+				}
+			});
+		dialog.show();
 	}
 
 	@Override

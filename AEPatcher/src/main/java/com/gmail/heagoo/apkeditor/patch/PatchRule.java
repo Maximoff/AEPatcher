@@ -14,12 +14,61 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import ru.maximoff.aepatcher.MainActivity;
 import ru.maximoff.aepatcher.R;
+import java.io.FilenameFilter;
 
 public abstract class PatchRule {
 
     private static final String NAME = "NAME:";
     protected String ruleName;
     protected int startLine;
+
+	public List<String> pathMatcher(String rootPath, String targetPath, int trimPos) {
+		List<String> result = new ArrayList<>();
+		int position = targetPath.indexOf('/');
+		if (position != -1) {
+			String subStr = targetPath.substring(0, position);
+			if (subStr.contains("*")) {
+				final String subMath = "^" + subStr.replace(".", "\\.").replace("*", ".*") + "$";
+				File dir = new File(rootPath);
+				File[] list = dir.listFiles(new FilenameFilter() {
+						@Override
+						public boolean accept(File p1, String p2) {
+							return p2.matches(subMath);
+						}
+					});
+				if (list != null) {
+					for (File f : list) {
+						if (f.isDirectory()) {
+							result.addAll(pathMatcher(f.getAbsolutePath(), targetPath.substring(position + 1), trimPos));
+						}
+					}
+				}
+			} else {
+				result.addAll(pathMatcher(rootPath + "/" + subStr, targetPath.substring(position + 1), trimPos));
+			}
+		} else {
+			if (targetPath.contains("*")) {
+				final String subMath = "^" + targetPath.replace(".", "\\.").replace("*", ".*") + "$";
+				File dir = new File(rootPath);
+				File[] list = dir.listFiles(new FilenameFilter() {
+						@Override
+						public boolean accept(File p1, String p2) {
+							return p2.matches(subMath);
+						}
+					});
+				if (list != null) {
+					for (File f : list) {
+						if (f.isFile()) {
+							result.add(f.getAbsolutePath().substring(trimPos));
+						}
+					}
+				}
+			} else {
+				result.add((rootPath + "/" + targetPath).substring(trimPos));
+			}
+		}
+		return result;
+	}
 
     // Assign values inside rawStr, values are got from patch context
     // For example: name="${STR_NAME}" --> name="app_name"
@@ -65,7 +114,7 @@ public abstract class PatchRule {
     }
 
     public abstract void parseFrom(LinedReader br, IPatchContext logger)
-            throws IOException;
+	throws IOException;
 
     // Return the next rule name (match_gotogoto), null for common rules
     public abstract String executeRule(MainActivity activity,
@@ -99,7 +148,7 @@ public abstract class PatchRule {
         long size = f.length();
         StringBuilder sb = new StringBuilder((int) size + 32);
         BufferedReader br = new BufferedReader(new InputStreamReader(
-                new FileInputStream(f)));
+												   new FileInputStream(f)));
         try {
             String line = br.readLine();
             if (line != null) {
@@ -110,7 +159,8 @@ public abstract class PatchRule {
                 sb.append(line);
             }
             return sb.toString();
-        } finally {
+        }
+		finally {
             closeQuietly(br);
         }
     }
@@ -119,7 +169,7 @@ public abstract class PatchRule {
 
         List<String> lines = new ArrayList<>();
         BufferedReader br = new BufferedReader(new InputStreamReader(
-                new FileInputStream(filepath)));
+												   new FileInputStream(filepath)));
         try {
             String line;
             while ((line = br.readLine()) != null) {
@@ -127,7 +177,8 @@ public abstract class PatchRule {
                     lines.add(line);
                 }
             }
-        } finally {
+        }
+		finally {
             closeQuietly(br);
         }
 
@@ -198,7 +249,7 @@ public abstract class PatchRule {
             for (int i = 0; i < paths.length - 1; ++i) {
                 try {
                     activity.getResListAdapter().addFolderReportError(parent,
-                            paths[i], false);
+																	  paths[i], false);
                 } catch (Exception e) {
                     logger.error(R.string.failed_create_dir, e.getMessage());
                     return false;
@@ -213,17 +264,18 @@ public abstract class PatchRule {
             return activity.getResListAdapter().addFile(path, input) != null;
         } catch (Exception e) {
             logger.error(R.string.general_error, e.getMessage());
-        } finally {
+        }
+		finally {
             closeQuietly(input);
         }
 
         return false;
     }
 
-    void addFilesInZip(MainActivity activity, String zipFile,
+    void addFilesInZip(MainActivity activity, String zipFile, String target,
                        IBeforeAddFile hook, IPatchContext logger) throws Exception {
         ZipFile zfile = null;
-        String targetDir = activity.getDecodeRootPath();
+        String targetDir = activity.getDecodeRootPath() + target;
 
         try {
             zfile = new ZipFile(zipFile);
@@ -247,7 +299,8 @@ public abstract class PatchRule {
             }
             zfile.close();
             zfile = null;
-        } finally {
+        }
+		finally {
             try {
                 if (null != zfile) {
                     zfile.close();

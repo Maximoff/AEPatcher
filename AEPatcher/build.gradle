@@ -8,8 +8,8 @@ android {
         applicationId "ru.maximoff.aepatcher"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.2-beta"
+        versionCode 4
+        versionName "1.3-beta"
     }
     buildTypes {
         release {

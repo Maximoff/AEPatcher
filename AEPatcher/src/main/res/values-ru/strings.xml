@@ -41,4 +41,8 @@
 	<string name="tspent">Времени затрачено: %s</string>
 	<string name="patch_error_apkisnull">Путь к apk не указан!</string>
 	<string name="patch_help">Справка</string>
+	<string name="shortcut">Ярлык</string>
+	<string name="success">Успешно</string>
+	<string name="error">Ошибка</string>
+	<string name="shortcut_exists">Ярлык уже существует</string>
 </resources>

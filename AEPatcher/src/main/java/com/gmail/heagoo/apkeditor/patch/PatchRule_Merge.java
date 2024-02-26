@@ -87,7 +87,7 @@ class PatchRule_Merge extends PatchRule {
                     path, logger);
 
             // Extract files in zip to target folder
-            addFilesInZip(activity, path,
+            addFilesInZip(activity, path, "",
                     new ResourceMerger(activity.getDecodeRootPath()), logger);
 
         } catch (Exception e) {

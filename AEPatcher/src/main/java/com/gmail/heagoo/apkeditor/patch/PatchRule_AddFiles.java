@@ -103,7 +103,7 @@ class PatchRule_AddFiles extends PatchRule {
                 fos = null;
 
                 // Extract files in zip to target folder
-                addFilesInZip(activity, path, null, logger);
+                addFilesInZip(activity, path, "/" + targetFile, null, logger);
             }
         } catch (Exception e) {
             logger.error(R.string.general_error, e.getMessage());

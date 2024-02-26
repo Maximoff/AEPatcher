@@ -65,6 +65,25 @@ class PatchRule_RemoveFiles extends PatchRule {
 				targetPath = assign;
 			}
 			
+			// проверка совпадающих путей
+			if (targetPath.contains("*")) {
+				List<String> list = pathMatcher(rootPath, targetPath, rootPath.length() + 1);
+				for (String s : list) {
+					String filePath = rootPath + "/" + s;
+					int pos = filePath.lastIndexOf('/');
+					String dirPath = filePath.substring(0, pos);
+					String fileName = filePath.substring(pos + 1);
+
+					File f = new File(filePath);
+					if (f.exists()) {
+						resAdapter.deleteFile(dirPath, fileName, false);
+					} else {
+						resAdapter.deleteFile(dirPath, fileName, true);
+					}
+				}
+				continue;
+			}
+
             String filePath = rootPath + "/" + targetPath;
             int pos = filePath.lastIndexOf('/');
             String dirPath = filePath.substring(0, pos);
