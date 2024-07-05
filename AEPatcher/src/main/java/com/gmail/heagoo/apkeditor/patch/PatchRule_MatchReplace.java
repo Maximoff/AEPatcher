@@ -267,7 +267,10 @@ class PatchRule_MatchReplace extends PatchRule {
         String result = replaceStr;
         List<String> groups = sec.groupStrs;
         for (int i = 0; i < groups.size(); ++i) {
-            result = result.replace("${GROUP" + (i + 1) + "}", groups.get(i));
+			String group = groups.get(i);
+			if (group != null) {
+            	result = result.replace("${GROUP" + (i + 1) + "}", group);
+			}
         }
         return result;
     }
