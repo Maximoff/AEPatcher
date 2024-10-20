@@ -41,7 +41,7 @@ class PatchRule_MatchAssign extends PatchRule {
 
     @Override
     public void parseFrom(LinedReader br, IPatchContext logger)
-            throws IOException {
+	throws IOException {
         super.startLine = br.getCurrentLine();
 
         String line = br.readLine();
@@ -57,7 +57,7 @@ class PatchRule_MatchAssign extends PatchRule {
                 String next = br.readLine();
                 String pathStr = next.trim();
                 this.pathFinder = new PathFinder(logger, pathStr,
-                        br.getCurrentLine());
+												 br.getCurrentLine());
             } else if (REGEX.equals(line)) {
                 String next = br.readLine();
                 this.bRegex = Boolean.valueOf(next.trim());
@@ -107,7 +107,7 @@ class PatchRule_MatchAssign extends PatchRule {
         // Only use the first line
         String regStr = matches.get(0);
         Pattern pattern = (bDotall ? Pattern.compile(regStr.trim(), Pattern.DOTALL)
-                : Pattern.compile(regStr.trim()));
+			: Pattern.compile(regStr.trim()));
         Matcher m = pattern.matcher(content);
         if (m.find(0)) {
             List<String> groupStrs = new ArrayList<>();
@@ -141,7 +141,10 @@ class PatchRule_MatchAssign extends PatchRule {
     private String getRealValue(String valueBefore, List<String> groupStrs) {
         String result = valueBefore;
         for (int i = 0; i < groupStrs.size(); ++i) {
-            result = result.replace("${GROUP" + (i + 1) + "}", groupStrs.get(i));
+			String group = groupStrs.get(i);
+			if (group != null) {
+				result = result.replace("${GROUP" + (i + 1) + "}", group);
+			}
         }
         return result;
     }
