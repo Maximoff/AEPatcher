@@ -159,8 +159,10 @@ class PatchRule_MatchReplace extends PatchRule {
                 try {
                     writeReplaces(filepath, content, sections);
                     modified = true;
+					int c = sections.size();
+					patchCtx.counterIncrement(c);
                     String message = patchCtx.getString(R.string.patch_info_num_replaced);
-                    message = targetFile + ": " + String.format(message, sections.size());
+                    message = targetFile + ": " + String.format(message, c);
                     patchCtx.info(message, false);
                 } catch (IOException e) {
                     patchCtx.error(R.string.patch_error_write_to, targetFile);
@@ -190,13 +192,16 @@ class PatchRule_MatchReplace extends PatchRule {
 
             // Save to file
             if (matchedIndexes.isEmpty()) {
-                patchCtx.error(R.string.patch_error_no_match, targetFile);
+                if (!isWildMatch) { // For wild match, not log it, as too many
+                    patchCtx.error(R.string.patch_error_no_match, targetFile);
+                }
             } else {
                 try {
                     writeReplaces(filepath, lines, matchedIndexes);
                     modified = true;
-                    patchCtx.info(R.string.patch_info_num_replaced, false,
-                            matchedIndexes.size());
+					int c = matchedIndexes.size();
+					patchCtx.counterIncrement(c);
+                    patchCtx.info(R.string.patch_info_num_replaced, false, c);
                 } catch (IOException e) {
                     patchCtx.error(R.string.patch_error_write_to, targetFile);
                 }

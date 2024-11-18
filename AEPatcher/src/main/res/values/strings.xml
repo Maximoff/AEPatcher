@@ -13,6 +13,7 @@
 	<string name="patch_error_publicxml_notfound">Cannot find res/values/public.xml</string>
 	<string name="patch_error_invalid_target" formatted="false">Invalid or unsupported target at line %d: %s</string>
 	<string name="patch_info_num_replaced">%d match(es) replaced.</string>
+    <string name="patch_info_total_replaced">Total %d match(es) replaced.</string>
 	<string name="general_error">Error: %s</string>
 	<string name="failed_create_dir">Failed to create directory: %s</string>
 	<string name="patch_error_no_goto_target">GOTO is not specified for [MATCH_GOTO]/[GOTO] rule.</string>

@@ -12,6 +12,7 @@
 	<string name="patch_error_publicxml_notfound">Не удаётся найти res/values/public.xml</string>
 	<string name="patch_error_invalid_target" formatted="false">Недействительная или неподдерживаемая цель в строке %d: %s</string>
 	<string name="patch_info_num_replaced">%d совпадений заменено.</string>
+    <string name="patch_info_total_replaced">Всего %d совпадений заменено.</string>
 	<string name="general_error">Ошибка: %s</string>
 	<string name="failed_create_dir">Не удалось создать папку: %s</string>
 	<string name="patch_error_no_goto_target">GOTO не определён в правиле [MATCH_GOTO]/[GOTO].</string>

@@ -3,6 +3,8 @@ package com.gmail.heagoo.apkeditor.patch;
 import java.util.List;
 
 public interface IPatchContext {
+	
+	public void counterIncrement(int c);
 
     // Return decoded root path, like "/data/data/.../files/decoded"
     public String getDecodeRootPath();

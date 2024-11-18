@@ -476,6 +476,11 @@ public class MainActivity extends Activity implements IPatchContext {
 	private Map<String, String> globalVariableValues = new HashMap<String, String>();
 	private PatchExecutor patchExecutor;
 	private ResListAdapter resAdapter;
+	private int totalReplaced = 0;
+	
+	public void counterIncrement(int c) {
+		totalReplaced += c;
+	}
 
 	public void setPackageName(String n) {
 		packageName = n;
@@ -628,8 +633,11 @@ public class MainActivity extends Activity implements IPatchContext {
 		runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
+					if (totalReplaced > 0) {
+						info(R.string.patch_info_total_replaced, true, false, true, new Integer(totalReplaced));
+					}
 					timeSpent = (System.currentTimeMillis() - timeSpent);
-					info(R.string.tspent, false, false, true, Utils.formatTime(timeSpent));
+					info(R.string.tspent, true, false, true, Utils.formatTime(timeSpent));
 					patchApplied = true;
 					positiveBtn.setText(R.string.ok);
 					negativeBtn.setVisibility(View.VISIBLE);
