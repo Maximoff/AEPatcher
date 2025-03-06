@@ -34,13 +34,17 @@ public class PathFilter_Component extends PathFilter {
             case APPLICATION:
                 if (cursor == 0) {
                     cursor += 1;
-                    return getSmaliPath(applicationName);
+                    try {
+						return getSmaliPath(applicationName);
+					} catch (Exception e) {}
                 }
                 break;
             case ACTIVITY:
             case LAUNCHER_ACTIVITY:
                 if (cursor < this.componentList.size()) {
-                    return getSmaliPath(componentList.get(cursor++));
+                    try {
+						return getSmaliPath(componentList.get(cursor++));
+					} catch (Exception e) {}
                 }
                 break;
         }
@@ -48,7 +52,7 @@ public class PathFilter_Component extends PathFilter {
         return null;
     }
 
-    private String getSmaliPath(String clsName) {
+    private String getSmaliPath(String clsName) throws Exception {
         String path = getRelativePath("smali", clsName, true);
 
         int index = 2;
@@ -65,7 +69,7 @@ public class PathFilter_Component extends PathFilter {
         return path;
     }
 
-    private String getRelativePath(String smaliFolderName, String clsName, boolean notExistRetNull) {
+    private String getRelativePath(String smaliFolderName, String clsName, boolean notExistRetNull) throws Exception {
         StringBuilder sb = new StringBuilder();
         sb.append(smaliFolderName);
         sb.append("/");

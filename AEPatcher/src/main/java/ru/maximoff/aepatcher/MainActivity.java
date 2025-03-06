@@ -54,6 +54,7 @@ public class MainActivity extends Activity implements IPatchContext {
 	public static final String INTENT_TYPE = "application/ru.maximoff.aepatcher-patch";
 	private final int REQUEST_PERM = 1010;
 	private final int REQUEST_MANAGER = 1011;
+	private final int NOTIFICATION_ID = 1012;
 	private final String[] PERMISSIONS = new String[]{"READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"};
 	private boolean patchApplied = false;
 	private View rootView;

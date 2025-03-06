@@ -3,7 +3,7 @@
 
 Движок патчей портирован из [исходного кода ApkEditor](https://github.com/timscriptov/ApkEditor "исходного кода ApkEditor").
 
-Скачать готовый APK можно по ссылке: https://maximoff.su/apktool/AEPatcher.apk?b=7
+Скачать готовый APK можно по ссылке: https://maximoff.su/apktool/AEPatcher.apk?b=8
 
 Пример запуска плагина:
 ```java
