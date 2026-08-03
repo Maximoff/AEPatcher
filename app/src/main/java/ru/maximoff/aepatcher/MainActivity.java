@@ -559,7 +559,7 @@ public class MainActivity extends Activity implements IPatchContext {
 	}
 
 	@Override
-	public void info(int resourceId, boolean bold, boolean red, boolean green, Object... args) {
+	public void infoColor(int resourceId, boolean bold, boolean red, boolean green, Object... args) {
 		String txt = getString(resourceId);
         if (args != null) {
             txt = String.format(txt, args);
@@ -635,10 +635,10 @@ public class MainActivity extends Activity implements IPatchContext {
 				@Override
 				public void run() {
 					if (totalReplaced > 0) {
-						info(R.string.patch_info_total_replaced, true, false, true, new Integer(totalReplaced));
+						infoColor(R.string.patch_info_total_replaced, true, false, true, new Integer(totalReplaced));
 					}
 					timeSpent = (System.currentTimeMillis() - timeSpent);
-					info(R.string.tspent, true, false, true, Utils.formatTime(timeSpent));
+					infoColor(R.string.tspent, true, false, true, Utils.formatTime(timeSpent));
 					patchApplied = true;
 					positiveBtn.setText(R.string.ok);
 					negativeBtn.setVisibility(View.VISIBLE);

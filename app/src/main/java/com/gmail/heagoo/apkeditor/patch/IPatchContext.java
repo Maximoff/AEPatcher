@@ -25,7 +25,7 @@ public interface IPatchContext {
     public List<String> getPatchNames();
 
     // In general, msg does not contain '\n'
-	public void info(int resourceId, boolean bBold, boolean red, boolean green, Object... args);
+	public void infoColor(int resourceId, boolean bBold, boolean red, boolean green, Object... args);
 	
 	public void info(int resourceId, boolean bBold, boolean red, Object... args);
 	

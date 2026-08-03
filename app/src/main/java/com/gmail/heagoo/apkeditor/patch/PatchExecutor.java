@@ -92,7 +92,7 @@ public class PatchExecutor implements IGeneralCallback {
 
                     index += 1;
                 }
-                patchContext.info(R.string.all_rules_applied, true, false, true);
+                patchContext.infoColor(R.string.all_rules_applied, true, false, true);
                 patchContext.patchFinished();
             }
         }.start();
